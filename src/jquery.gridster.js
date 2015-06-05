@@ -37,6 +37,8 @@
             distance: 4,
             items: ".gs_w:not(.static)"
         },
+		  //ucop change to make snap up to highest row conditional
+		  snap_up: true,
         style_tag_id_prefix: 'gridster-style-tags-'
     };
 
@@ -85,6 +87,9 @@
     *    @param {Object} [options.draggable] An Object with all options for
     *     Draggable class you want to overwrite. See Draggable docs for more
     *     info.
+	 *    @param {Object} [options.snap_up] If true (default), widgets will snap up to the highest empty row above the dropped spot.
+    *     info.
+
     *
     * @constructor
     */
@@ -1045,9 +1050,14 @@
          * update the new placeholder position. */
         if (!$overlapped_widgets.length) {
             var pp = this.can_go_player_up(this.player_grid_data);
-            if (pp !== false) {
-                to_row = pp;
-            }
+				//ucop change: based on note in this thread:
+				//https://github.com/ducksboard/gridster.js/issues/45
+				//see comment by bompus + another change below suggested by DomTheDeveloper (fn.can_go_up_to_row)
+				if( this.options.snap_up === true ){
+					 if (pp !== false) {
+						  to_row = pp;
+					 }
+				}
             if(this.can_placeholder_be_set(to_col, to_row, player_size_x, player_size_y)){
                 this.set_placeholder(to_col, to_row);
             }
@@ -2085,6 +2095,11 @@
         var actual_row = widget_grid_data.row;
         var r;
 
+		  //ucop changes: conditionally turn off snap up
+		  //based on note in this thread:
+		  // https://github.com/ducksboard/gridster.js/issues/45
+		  // see comment by DomTheDeveloper
+		  if( ! this.options.snap_up === true ){return false;}
         /* generate an array with columns as index and array with
          * upper rows empty in the column */
         this.for_each_column_occupied(widget_grid_data, function(tcol) {
