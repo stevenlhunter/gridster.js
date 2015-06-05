@@ -2099,7 +2099,10 @@
 		  //based on note in this thread:
 		  // https://github.com/ducksboard/gridster.js/issues/45
 		  // see comment by DomTheDeveloper
-		  if( ! this.options.snap_up === true ){return false;}
+		  if( ! this.options.snap_up ){
+				return false;
+		  }
+
         /* generate an array with columns as index and array with
          * upper rows empty in the column */
         this.for_each_column_occupied(widget_grid_data, function(tcol) {
